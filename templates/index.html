@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}RedactShield - Enterprise File Redaction{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-glass-card">
+        <div class="hero-badge">
+            <span class="pulse-dot"></span> Secure Data Shielding v2.0
+        </div>
+        <h1 class="hero-title">Secure. Irreversible. <br><span class="gradient-text">File Redaction</span></h1>
+        <p class="hero-subtitle">
+            Instantly remove sensitive PII (emails, phone numbers, credit cards, SSNs) from PDF, Word documents, and text files. Built for enterprise data security and compliance.
+        </p>
+        <div class="hero-actions">
+            <a href="{{ url_for('auth.register') }}" class="btn-primary-large">Get Started Free <i data-lucide="arrow-right"></i></a>
+            <a href="{{ url_for('auth.login') }}" class="btn-secondary-large">Log In <i data-lucide="log-in"></i></a>
+        </div>
+    </div>
+</section>
+
+<section class="features-section">
+    <div class="section-header">
+        <h2 class="section-title">Enterprise Security Features</h2>
+        <p class="section-subtitle">Keep your sensitive information strictly confidential before sharing documents outside your network.</p>
+    </div>
+    
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon-wrapper blue">
+                <i data-lucide="regex"></i>
+            </div>
+            <h3 class="feature-card-title">Regex Smart Scanning</h3>
+            <p class="feature-card-text">Automated detection of emails, telephone numbers, credit cards, and social security numbers with highly optimized regex algorithms.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon-wrapper purple">
+                <i data-lucide="file-text"></i>
+            </div>
+            <h3 class="feature-card-title">Multi-Format Redaction</h3>
+            <p class="feature-card-text">Perfect support for PDF (PyMuPDF black boxing), DOCX (preserving formatting styles), and standard text/CSV/JSON files.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon-wrapper green">
+                <i data-lucide="history"></i>
+            </div>
+            <h3 class="feature-card-title">Dashboard History</h3>
+            <p class="feature-card-text">Securely track redaction stats, upload statuses, and history logs from a beautiful and centralized interface.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon-wrapper gold">
+                <i data-lucide="shield-check"></i>
+            </div>
+            <h3 class="feature-card-title">Privacy-First Execution</h3>
+            <p class="feature-card-text">Original uploaded documents are scrubbed immediately from the disk after processing. Only redacted copies remain in secure output dirs.</p>
+        </div>
+    </div>
+</section>
+
+<section class="cta-banner">
+    <div class="cta-glass-card">
+        <h2 class="cta-title">Ready to secure your corporate intelligence?</h2>
+        <p class="cta-subtitle">Create a free account in 30 seconds and start redacting files immediately.</p>
+        <a href="{{ url_for('auth.register') }}" class="btn-primary-large">Sign Up Now</a>
+    </div>
+</section>
+{% endblock %}

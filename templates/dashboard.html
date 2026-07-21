@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Dashboard – FileRedactor{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="page-title">
+        <div style="font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">
+            <i class="fa-solid fa-code"></i> Developed by Nidheesh Reddy
+        </div>
+        <h1>Dashboard Overview</h1>
+        <p>Welcome back, {{ current_user.email.split('@')[0] }}. Here is your redaction activity.</p>
+    </div>
+    <a href="{{ url_for('main.upload') }}" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> New Redaction
+    </a>
+</div>
+
+<!-- Tabs Navigation -->
+<div class="tabs-nav">
+    <button class="tab-btn active" data-target="tab-overview">Overview</button>
+    <button class="tab-btn" data-target="tab-analytics">Analytics</button>
+    <button class="tab-btn" data-target="tab-history">File History</button>
+</div>
+
+<!-- Tab: Overview -->
+<div id="tab-overview" class="tab-content active">
+    <div class="stats-grid">
+        <div class="stat-card glass">
+            <div class="stat-icon"><i class="fa-solid fa-file-shield"></i></div>
+            <div class="stat-info">
+                <span class="stat-value">{{ total_files }}</span>
+                <span class="stat-label">Files Processed</span>
+            </div>
+        </div>
+        <div class="stat-card glass">
+            <div class="stat-icon"><i class="fa-solid fa-user-secret"></i></div>
+            <div class="stat-info">
+                <span class="stat-value">{{ total_redactions }}</span>
+                <span class="stat-label">Items Redacted</span>
+            </div>
+        </div>
+        <div class="stat-card glass">
+            <div class="stat-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <div class="stat-info">
+                <span class="stat-value">{% if logs %}{{ logs[0].timestamp.strftime('%b %d') }}{% else %}N/A{% endif %}</span>
+                <span class="stat-label">Last Activity</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tab: Analytics -->
+<div id="tab-analytics" class="tab-content">
+    <div class="upload-grid">
+        <div class="upload-panel glass" style="min-height: 350px;">
+            <h3 style="margin-bottom: 1rem; font-size: 1.05rem;"><i class="fa-solid fa-chart-pie"></i> PII Categories</h3>
+            <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+        <div class="upload-panel glass" style="min-height: 350px;">
+            <h3 style="margin-bottom: 1rem; font-size: 1.05rem;"><i class="fa-solid fa-chart-line"></i> 7-Day Trend</h3>
+            <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tab: History -->
+<div id="tab-history" class="tab-content">
+    <div class="table-container glass">
+        <div class="table-header">
+            <h2>Recent Redactions</h2>
+        </div>
+        {% if logs %}
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Items Redacted</th>
+                        <th>Style Used</th>
+                        <th>Date & Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td class="cell-filename">
+                            <i class="fa-regular fa-file-lines"></i> {{ log.filename }}
+                        </td>
+                        <td><span class="badge">{{ log.redacted_count }}</span></td>
+                        <td>{{ log.style_used | title }}</td>
+                        <td>{{ log.timestamp.strftime('%b %d, %Y  %H:%M') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fa-regular fa-folder-open empty-icon"></i>
+            <h3>No History Found</h3>
+            <p>You haven't redacted any files yet. Get started by uploading your first document.</p>
+            <a href="{{ url_for('main.upload') }}" class="btn btn-primary">
+                <i class="fa-solid fa-upload"></i> Upload File
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

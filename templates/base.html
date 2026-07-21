@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="File Redaction App – Automatically redact sensitive information from your files.">
+    <title>{% block title %}File Redactor{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Document Preview Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.5.1/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="{% if not current_user.is_authenticated %}no-sidebar{% endif %}">
+    <!-- Animated background orbs -->
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+
+    <div class="app-container">
+        {% if current_user.is_authenticated %}
+        <!-- Mobile Toggle -->
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="{{ url_for('main.dashboard') }}" class="sidebar-brand">
+                    <i class="fa-solid fa-shield-halved"></i> FileRedactor
+                </a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('main.dashboard') }}" class="sidebar-link {% if request.endpoint == 'main.dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-chart-line"></i> Dashboard
+                </a>
+                <a href="{{ url_for('main.upload') }}" class="sidebar-link {% if request.endpoint == 'main.upload' %}active{% endif %}">
+                    <i class="fa-solid fa-file-shield"></i> Upload & Redact
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        {{ current_user.email[0] | upper }}
+                    </div>
+                    <div class="user-info">
+                        <span class="user-email" title="{{ current_user.email }}">{{ current_user.email }}</span>
+                        <span class="user-role">User</span>
+                    </div>
+                </div>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline btn-full btn-danger">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </div>
+        </aside>
+        {% endif %}
+
+        <!-- Main Content -->
+        <main class="main-content-wrapper">
+            <!-- Toast Notifications Container -->
+            <div class="toast-container" id="toastContainer">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <!-- Flash messages are picked up by main.js and converted to toasts -->
+                    <div class="server-flash" data-category="{{ category }}" data-message="{{ message }}" style="display:none;"></div>
+                    {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
